@@ -19,12 +19,12 @@ WORKDIR /build
 # Download packages
 RUN wget https://openresty.org/download/ngx_openresty-1.9.3.1.tar.gz \
     && tar xfz ngx_openresty-1.9.3.1.tar.gz \
-    && wget https://github.com/openresty/lua-nginx-module/archive/ssl-cert-by-lua.zip \
+    && wget https://github.com/LuckyGeck/lua-nginx-module/archive/ssl-cert-by-lua.zip \
     && unzip ssl-cert-by-lua.zip \
     && wget https://github.com/simpl/ngx_devel_kit/archive/v0.2.19.tar.gz -O ngx_devel_kit-0.2.19.tar.gz \
     && tar xfz ngx_devel_kit-0.2.19.tar.gz \
-    && wget https://www.openssl.org/source/openssl-1.0.2d.tar.gz \
-    && tar xfz openssl-1.0.2d.tar.gz \
+    && wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz \
+    && tar xfz openssl-1.0.2g.tar.gz \
     && wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.37.tar.gz \
     && tar xfz pcre-8.37.tar.gz \
     && wget http://zlib.net/zlib-1.2.8.tar.gz \
@@ -47,7 +47,7 @@ RUN cd /build/ngx_openresty-1.9.3.1 \
         --with-http_stub_status_module \
         --with-http_gzip_static_module \
         --with-debug \
-        --with-openssl=/build/openssl-1.0.2d \
+        --with-openssl=/build/openssl-1.0.2g \
         --with-pcre=/build/pcre-8.37 \
         --with-pcre-jit \
         --with-zlib=/build/zlib-1.2.8 \
@@ -110,13 +110,13 @@ RUN cd /build/root \
 # Build deb
 RUN fpm -s dir -t deb \
     -n openresty \
-    -v 1.9.3.1-tapstream1 \
+    -v 1.9.3.1-luckygeck1 \
     -C /build/root \
     -p openresty_VERSION_ARCH.deb \
     --description 'a high performance web server and a reverse proxy server' \
     --url 'http://openresty.org/' \
     --category httpd \
-    --maintainer 'Nick Sitarz <nick@tapstream.com>' \
+    --maintainer 'Pavel Sychev <pasha.sychev@gmail.com>' \
     --depends wget \
     --depends unzip \
     --depends libncurses5 \
