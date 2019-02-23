@@ -19,20 +19,22 @@ WORKDIR /build
 # Download packages
 RUN wget https://openresty.org/download/ngx_openresty-1.9.3.1.tar.gz \
     && tar xfz ngx_openresty-1.9.3.1.tar.gz \
-    && wget https://github.com/LuckyGeck/lua-nginx-module/archive/ssl-cert-by-lua.zip \
-    && unzip ssl-cert-by-lua.zip \
     && wget https://github.com/simpl/ngx_devel_kit/archive/v0.2.19.tar.gz -O ngx_devel_kit-0.2.19.tar.gz \
     && tar xfz ngx_devel_kit-0.2.19.tar.gz \
     && wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz \
     && tar xfz openssl-1.0.2g.tar.gz \
-    && wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.37.tar.gz \
-    && tar xfz pcre-8.37.tar.gz \
-    && wget http://zlib.net/zlib-1.2.8.tar.gz \
-    && tar xfz zlib-1.2.8.tar.gz \
+    && wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.gz \
+    && tar xfz pcre-8.38.tar.gz \
+    && wget http://zlib.net/zlib-1.2.11.tar.gz \
+    && tar xfz zlib-1.2.11.tar.gz \
     && wget http://luajit.org/download/LuaJIT-2.1.0-beta1.tar.gz \
     && tar xfz LuaJIT-2.1.0-beta1.tar.gz \
     && wget https://keplerproject.github.io/luarocks/releases/luarocks-2.2.2.tar.gz \
     && tar xfz luarocks-2.2.2.tar.gz
+
+
+# Apply patch for certificate self-sign
+COPY lua-nginx-module /build/lua-nginx-module-ssl-cert-by-lua
 
 
 # Compile and install openresty
@@ -48,9 +50,9 @@ RUN cd /build/ngx_openresty-1.9.3.1 \
         --with-http_gzip_static_module \
         --with-debug \
         --with-openssl=/build/openssl-1.0.2g \
-        --with-pcre=/build/pcre-8.37 \
+        --with-pcre=/build/pcre-8.38 \
         --with-pcre-jit \
-        --with-zlib=/build/zlib-1.2.8 \
+        --with-zlib=/build/zlib-1.2.11 \
         --with-cc-opt='-O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2' \
         --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
         --prefix=/usr/share/nginx \
